@@ -1,11 +1,14 @@
-angular.module('myApp').config(['$urlRouterProvider', '$stateProvider',
-  function($urlRouterProvider, $stateProvider, Auth){
-    $urlRouterProvider.otherwise("/dashboard/projects/list/current/All");
+angular.module('sampleApp').config(['$urlRouterProvider', '$stateProvider', function($urlRouterProvider, $stateProvider){
+    $urlRouterProvider.otherwise("/main");
     $stateProvider
-        .state("main",{
-          url:"/main",
-          templateUrl: "templates/layout/main.html",
+        .state("root",{
+          url:"",
+          templateUrl: "templates/layout/layout.html",
           abstract: true
+        })
+        .state("root.main",{
+          url:"/main",
+          templateUrl: "templates/pages/main.html"
         })
 
   }]);

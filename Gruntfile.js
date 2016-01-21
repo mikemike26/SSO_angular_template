@@ -18,6 +18,7 @@ module.exports = function (grunt) {
         src: [
           'node_modules/angular/angular.js',
           'node_modules/jquery/dist/jquery.js',
+          'node_modules/angular-ui-router/build/angular-ui-router.min.js',
           'js/vendor/**/*.js',
           'js/app.js',
           'js/routes.js',

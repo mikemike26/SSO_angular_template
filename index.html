@@ -11,19 +11,23 @@
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700' rel='stylesheet' type='text/css'>
 
   <!--STYLES-->
-  <link rel="stylesheet" href="/styles/main.css">
-  <link rel="stylesheet" href="/styles/main.css">
+  <link rel="stylesheet" href="styles/main.css">
   <!--STYLES END-->
 </head>
 
-<body>
-
+<body ng-app="sampleApp">
+<div ui-view=""></div>
 
 <!-- start auto template tags -->
 <script type="text/javascript" src="node_modules/angular/angular.js"></script>
 <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="node_modules/angular-ui-router/build/angular-ui-router.min.js"></script>
 <script type="text/javascript" src="js/app.js"></script>
 <script type="text/javascript" src="js/routes.js"></script>
+<script type="text/javascript" src="js/constants/authConfig.js"></script>
+<script type="text/javascript" src="js/constants/userRoles.js"></script>
+<script type="text/javascript" src="js/models/sampleModel.js"></script>
+<script type="text/javascript" src="js/services/auth.js"></script>
 <!-- end auto template tags -->
 </body>
 
