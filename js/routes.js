@@ -8,8 +8,19 @@ angular.module('sampleApp').config(['$urlRouterProvider', '$stateProvider', func
         })
         .state("root.main",{
           url:"/main",
+          data: {
+            role: "*"
+          },
           templateUrl: "templates/pages/main.html"
         })
+        .state("root.admin",{
+          url:"/main",
+          data: {
+            role: "admin"
+          },
+          templateUrl: "templates/pages/admin.html"
+        })
+
 
   }]);
 

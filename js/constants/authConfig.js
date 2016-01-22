@@ -18,7 +18,8 @@ angular.module('sampleApp').constant('AUTH_CONFIG', {
     //additional information sent along with the redirect
     //just keep adding any needed keys and values
     params: {
-      appId: 0
+      appId: 0,
+      userId: "barf"
     }
   }
 });
