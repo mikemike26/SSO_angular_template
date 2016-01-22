@@ -23,7 +23,7 @@ angular.module('sampleApp').constant('AUTH_SETTINGS', {
     params: {
       //application id to identify to login portal
       appId: 0,
-      //this is the origin of the redirect
+      //this is the origin of the redirect, the SSO will nav back to this page after it validates
       //specify a relative url path or 'current' to use the current page the redirect started from
       origin: "current"
     }

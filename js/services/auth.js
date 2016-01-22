@@ -98,6 +98,7 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
         getAuthStatus = function () {
           var deferred = $q.defer();
 
+          //sets our redirect information from our auth settings so it's available in case auth fails
           Session.setRedirect();
 
           if (AUTH_SETTINGS.authEnabled) {
