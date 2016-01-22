@@ -1,119 +1,187 @@
-angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_CONFIG', '$window', function ($q, $http, AUTH_CONFIG, $window) {
-  var Auth = {},
-      dummySession = {
-        csrf: "2kjn2kj42l4h2h42kj34kj24",
-        user: {
-          id: 0,
-          name: "Mike Rensel",
-          role: "guest"
-        }
-
-      };
-
-
-  //combines our return url with any params that need to be sent with it.
-  var buildReturnUrl = function () {
-        var loginConfig = AUTH_CONFIG.loginRedirect,
-            url = loginConfig.url,
-            params = loginConfig.params,
-            query = "?",
-            count = 0;
-
-        for (var param in params) {
-          if (params.hasOwnProperty(param)) {
-            if (count > 0) {
-              query = query + "&";
-            }
-            query = query + (param + "=" + params[param]);
-
-            count++;
+angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$window', '$rootScope', '$timeout', 'Session', 'USER_ROLES',
+  function ($q, $http, AUTH_SETTINGS, $window, $rootScope, $timeout, Session, USER_ROLES) {
+    var Auth = {},
+        dummySession = {
+          csrf: "2kjn2kj42l4h2h42kj34kj24",
+          user: {
+            id: 0,
+            name: "Mike Rensel",
+            role: "admin"
           }
-        }
 
-        if (query.length > 1) {
-          url = url + query;
-        }
-        
-        return url;
-
-      },
-
-  //pulls out all params from location.search and returns contents as an object
-      getQueryParams = function () {
-        var query, queriesObject = {},
-            queries = $window.document.location.search.split("?")[1].split("&");
-
-        for (var a = 0, b = queries.length; a < b; a++) {
-          query = queries[a].split("=");
-
-          queriesObject[query[0]] = query[1];
-        }
-
-        return queriesObject;
-      };
-
-  Auth.isAuthenticated = function () {
-    var deferred = $q.defer();
-
-    if (AUTH_CONFIG.authEnabled) {
-      $http({
-        method: 'GET',
-        url: '/opcos/getAll',
-        dataType: 'json',
-        contentType: 'application/json'
-      }).success(function (data, status, headers, config) {
-
-        deferred.resolve(data);
-
-      }).error(function (data, status, headers, config) {
-        deferred.reject(data);
-      });
-    } else {
-
-      //deferred.resolve(dummySession);
-      deferred.reject(dummySession);
-    }
-
-    return deferred.promise;
-  };
-
-  Auth.processAuth = function () {
-    var deferred = $q.defer(),
-        payload = {
-          token: getQueryParams().sso
         };
 
-    if (AUTH_CONFIG.authEnabled) {
-      $http({
-        method: 'POST',
-        url: '/opcos/getAll',
-        data: angular.toJson(payload),
-        dataType: 'json',
-        contentType: 'application/json'
-      }).success(function (data, status, headers, config) {
 
-        deferred.resolve(angular.fromJson(data));
+    var
 
-      }).error(function (data, status, headers, config) {
-        deferred.reject(data);
-      });
-    } else {
+    //combines our return url with any params that need to be sent with it.
+        buildReturnUrl = function () {
+          var loginConfig = Session,
+              url = loginConfig.url,
+              params = loginConfig.params,
+              query = "?",
+              count = 0;
 
-      deferred.resolve(dummySession);
-    }
+          for (var param in params) {
+            if (params.hasOwnProperty(param)) {
+              if (count > 0) {
+                query = query + "&";
+              }
+              query = query + (param + "=" + params[param]);
 
-    return deferred.promise;
-  };
+              count++;
+            }
+          }
 
-  Auth.returnToSSO = function () {
+          if (query.length > 1) {
+            url = url + query;
+          }
 
-    $window.location.href = buildReturnUrl();
-  };
+          return url;
 
-  Auth.hasToken = function() {
+        },
 
-    return $window.document.location.search ? getQueryParams().sso : undefined;
-  };
+    //pulls out all params from location.search and returns contents as an object
+        getQueryParams = function () {
+          var query, queriesObject = {},
+              queries = $window.document.location.search.split("?")[1].split("&");
 
-  return Auth;
-}]);
+          for (var a = 0, b = queries.length; a < b; a++) {
+            query = queries[a].split("=");
+
+            queriesObject[query[0]] = query[1];
+          }
+
+          return queriesObject;
+        },
+        setSession = function (session) {
+
+          //sets our client side session with our user info
+          Session.create(session.user.id, session.user.name, session.user.role);
+
+          //sets csrf token to header so it's included in all out going requests
+          $http.defaults.headers.common['X-CSRF-Token'] = session.csrf;
+
+          //we don't need to clean this up because we will only ever instantiate this once
+          $rootScope.$on("$stateChangeStart", function (e, nextState) {
+
+            // on state change, check data.role to gate the page
+            // if session role doesn't match data.role, prevent page nav
+            if (nextState.data && nextState.data.role !== Session.role && nextState.data.role !== USER_ROLES.all) {
+              e.preventDefault();
+            }
+          });
+        },
+        destroySession = function (status) {
+
+          //if both calls to check the session fail, clear anything set in session
+          returnToSSO(status);
+          Session.destroy();
+        },
+        returnToSSO = function (status) {
+          var errorMsg = AUTH_SETTINGS.authErrorCodes[status];
+
+          $rootScope.$emit("Auth:errorStatus", errorMsg);
+
+          //does not need to be cleaned up, we are redirecting away from our app
+          $timeout(function () {
+            //console.log(buildReturnUrl());
+            $window.location.href = buildReturnUrl();
+
+          }, AUTH_SETTINGS.authErrorDuration);
+        },
+
+        hasToken = function () {
+
+          return $window.document.location.search ? getQueryParams().sso : undefined;
+        },
+        getAuthStatus = function () {
+          var deferred = $q.defer();
+
+          Session.setRedirect();
+
+          if (AUTH_SETTINGS.authEnabled) {
+            $http({
+              method: 'GET',
+              url: '/opcos/getAll',
+              dataType: 'json',
+              contentType: 'application/json'
+            }).success(function (data, status, headers, config) {
+
+              deferred.resolve(data);
+
+            }).error(function (data, status, headers, config) {
+              deferred.reject(status);
+            });
+          } else {
+            //deferred.resolve(dummySession);
+            deferred.reject(dummySession);
+          }
+
+          return deferred.promise;
+        },
+        processAuthToken = function () {
+          var deferred = $q.defer(),
+              payload = {
+                token: getQueryParams().sso
+              };
+
+          if (AUTH_SETTINGS.authEnabled) {
+            $http({
+              method: 'POST',
+              url: '/opcos/getAll',
+              data: angular.toJson(payload),
+              dataType: 'json',
+              contentType: 'application/json'
+            }).success(function (data, status, headers, config) {
+
+              deferred.resolve(angular.fromJson(data));
+
+            }).error(function (data, status, headers, config) {
+              deferred.reject(data);
+            });
+          } else {
+
+            deferred.resolve(dummySession);
+          }
+
+          return deferred.promise;
+        };
+
+//=======================================================================================================
+
+    Auth.isAuthenticated = function () {
+      //check server for if the current user is already authenticated
+      getAuthStatus().then(
+          function success(session) {
+
+            setSession(session);
+
+          },
+
+          //if initial session check fails - the user is not logged in
+          function error(status) {
+
+            //check the url for a SSO token
+            if (hasToken() !== undefined) {
+
+              processAuthToken().then(
+                  function success(session) {
+
+                    setSession(session);
+                  },
+                  function error(status) {
+
+                    destroySession(status);
+                  }
+              );
+            } else {
+
+              destroySession(status);
+            }
+          }
+      );
+    };
+
+    return Auth;
+  }]);

@@ -26,7 +26,7 @@ module.exports = function (grunt) {
           'js/directives/**/*.js',
           'js/models/**/*.js',
           'js/services/**/*.js',
-          'js/vendor/**/*.js'
+          'js/providers/**/*.js'
         ],
         dest: 'index.html'
       },
