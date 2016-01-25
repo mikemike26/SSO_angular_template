@@ -115,8 +115,7 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
               deferred.reject(status);
             });
           } else {
-            //deferred.resolve(dummySession);
-            deferred.reject(dummySession);
+            deferred.resolve(dummySession);
           }
 
           return deferred.promise;
