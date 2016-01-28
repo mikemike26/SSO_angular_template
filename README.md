@@ -1,4 +1,4 @@
-# Single Sign On Angular Template
+# Single Sign On Auth Angular Template
 
 This is a base app that handles authentication, permissions, route protection, setting CSRF token to request readers, and errors involved with an sso token.  Sets angular app session and provides settings to disable authentication behavior in development.
 
