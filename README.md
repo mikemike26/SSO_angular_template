@@ -1,13 +1,5 @@
-# Single Sign On sample Auth Application
+# Single Sign On Angular Template
 
-This is a basic single sign on application with authentication.
+This is a base app that handles authentication, route protection , and errors invloved with an sso token.  Sets angular app session and provides settings to disable authentication behavior in development.
 
-run "npm install" on the command line to install initial dependencies
-
-
-a [Sails](http://sailsjs.org) application
-
-
-to deploy live:	forever	start app.js
-
-for production: forever start app.js --prod
+Check out the config and setting files first, then the auth service.
