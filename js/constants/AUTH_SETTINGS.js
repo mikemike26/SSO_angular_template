@@ -14,7 +14,7 @@ angular.module('sampleApp').constant('AUTH_SETTINGS', {
   //redirect options
   loginRedirect: {
     //redirect back to SSO url
-    url: 'https://gateway.mktec.com/ManagedUsers/home.xhtml',
+    url: 'https://yourSSOGateway.com',
 
     //additional information sent along with the redirect
     //just keep adding any needed keys and values
