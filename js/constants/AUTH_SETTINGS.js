@@ -9,7 +9,7 @@ angular.module('sampleApp').constant('AUTH_SETTINGS', {
   //
   //For this to continue to work after backend implementation, you would need to build this flag into your models
   //to disable all web calls and just use dummy data.
-  authEnabled: false,
+  authEnabled: true,
 
   //redirect options
   loginRedirect: {

@@ -1,4 +1,4 @@
-angular.module('sampleApp').factory('SampleModel',['$q','$http', 'AUTH_SETTINGS','Auth', function($q, $http, AUTH_SETTINGS, Auth){
+angular.module('sampleApp').factory('SampleModel',['$q','$http', 'AUTH_SETTINGS', function($q, $http, AUTH_SETTINGS){
   var SampleModel = {},
 
       //create dummy data for this model based on what the server will return
@@ -33,21 +33,16 @@ angular.module('sampleApp').factory('SampleModel',['$q','$http', 'AUTH_SETTINGS'
 
     //if auth is enabled, use web service
     if(useWebCall) {
-      //waits for auth to return before sending call for model
-      Auth.waitForAuth(function() {
-        $http({
-          method: 'GET',
-          url: '/projects/getAll',
-          dataType: 'json',
-          contentType: 'application/json'
-        }).success(function (data, status, headers, config) {
-          deferred.resolve(data);
-        }).error(function (data, status, headers, config) {
-          deferred.reject(data);
-        });
+      $http({
+        method: 'GET',
+        url: '/projects/getAll',
+        dataType: 'json',
+        contentType: 'application/json'
+      }).success(function (data, status, headers, config) {
+        deferred.resolve(data);
+      }).error(function (data, status, headers, config) {
+        deferred.reject(data);
       });
-
-
 
       //if auth disabled, return dummy data
     }else {

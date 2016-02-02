@@ -1,5 +1,5 @@
-angular.module('sampleApp').service('Session', ['USER_ROLES', 'AUTH_SETTINGS', '$window', '$q',
-  function (USER_ROLES, AUTH_SETTINGS, $window, $q) {
+angular.module('sampleApp').service('Session', ['USER_ROLES', 'AUTH_SETTINGS', '$window',
+  function (USER_ROLES, AUTH_SETTINGS, $window) {
     var
     //add any methods here for required params that need formatting
         createParams = function (params) {
