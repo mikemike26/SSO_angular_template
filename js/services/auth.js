@@ -108,7 +108,7 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
           if (AUTH_SETTINGS.authEnabled) {
             $http({
               method: 'GET',
-              url: '/opcos/getAll',
+              url: '/auth/status',
               dataType: 'json',
               contentType: 'application/json'
             }).success(function (data, status, headers, config) {
@@ -135,7 +135,7 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
           if (AUTH_SETTINGS.authEnabled) {
             $http({
               method: 'POST',
-              url: '/opcos/getAll',
+              url: '/auth/token',
               data: angular.toJson(payload),
               dataType: 'json',
               contentType: 'application/json'
