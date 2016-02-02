@@ -1,5 +1,5 @@
-angular.module('sampleApp').factory('SampleModel',['$q','$http', 'AUTH_SETTINGS','Auth', function($q, $http, AUTH_SETTINGS, Auth){
-  var SampleModel = {},
+angular.module('sampleApp').factory('SampleModel2',['$q','$http', 'AUTH_SETTINGS','Auth', function($q, $http, AUTH_SETTINGS, Auth){
+  var SampleModel2 = {},
 
       //create dummy data for this model based on what the server will return
       dummyData = [
@@ -23,7 +23,7 @@ angular.module('sampleApp').factory('SampleModel',['$q','$http', 'AUTH_SETTINGS'
         }
       ];
 
-  SampleModel.getAll = function() {
+  SampleModel2.getAll = function() {
     var //abstracted this out to a variable so you could turn this single web call on to test if needed
         //set true to enable
         //
@@ -58,5 +58,5 @@ angular.module('sampleApp').factory('SampleModel',['$q','$http', 'AUTH_SETTINGS'
   };
 
 
-  return SampleModel;
+  return SampleModel2;
 }]);

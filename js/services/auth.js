@@ -56,6 +56,8 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
         },
         setSession = function (session) {
 
+          Auth.resolveAuth();
+
           //sets our client side session with our user info
           Session.create(session.user.id, session.user.name, session.user.role);
 
@@ -95,6 +97,8 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
 
           return $window.document.location.search ? getQueryParams().sso : undefined;
         },
+
+        //Enter your auth web service here =================================================================================
         getAuthStatus = function () {
           var deferred = $q.defer();
 
@@ -120,6 +124,8 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
 
           return deferred.promise;
         },
+
+        //enter your token processing web service here ======================================================================
         processAuthToken = function () {
           var deferred = $q.defer(),
               payload = {
@@ -140,6 +146,7 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
             }).error(function (data, status, headers, config) {
               deferred.reject(data);
             });
+
           } else {
 
             deferred.resolve(dummySession);
@@ -147,6 +154,24 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
 
           return deferred.promise;
         };
+
+
+    //exposes a promise for all models==============================================================================
+    var deferred = $q.defer(),
+        getPromise = function() {
+          return deferred.promise;
+        };
+
+    Auth.waitForAuth = function(callback) {
+
+      return getPromise().then(callback);
+
+    };
+
+    Auth.resolveAuth = function() {
+      deferred.resolve();
+    };
+
 
 //=======================================================================================================
 
