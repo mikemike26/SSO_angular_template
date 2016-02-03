@@ -108,7 +108,6 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
               method: 'GET',
               url: '/auth/status',
               dataType: 'json',
-              auth: true,
               contentType: 'application/json'
             }).success(function (data, status, headers, config) {
 
@@ -137,7 +136,6 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
               url: '/auth/token',
               data: angular.toJson(payload),
               dataType: 'json',
-              auth: true,
               contentType: 'application/json'
             }).success(function (data, status, headers, config) {
 
