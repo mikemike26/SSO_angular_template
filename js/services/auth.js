@@ -62,6 +62,8 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
           //sets csrf token to header so it's included in all out going requests
           $http.defaults.headers.common['X-CSRF-Token'] = session.csrf;
 
+          Auth.resolveAuth();
+
           //we don't need to clean this up because we will only ever instantiate this once
           $rootScope.$on("$stateChangeStart", function (e, nextState) {
 
