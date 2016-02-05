@@ -64,15 +64,6 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
 
           Auth.resolveAuth();
 
-          //we don't need to clean this up because we will only ever instantiate this once
-          $rootScope.$on("$stateChangeStart", function (e, nextState) {
-
-            // on state change, check data.role to gate the page
-            // if session role doesn't match data.role, prevent page nav
-            if (nextState.data && nextState.data.role !== Session.role && nextState.data.role !== USER_ROLES.all) {
-              e.preventDefault();
-            }
-          });
         },
         destroySession = function (status) {
 
@@ -196,12 +187,12 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
                   },
                   function error(status) {
 
-                    destroySession(status);
+                    //destroySession(status);
                   }
               );
             } else {
 
-              destroySession(status);
+              //destroySession(status);
             }
           }
       );
