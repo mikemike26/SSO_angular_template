@@ -1,5 +1,5 @@
-angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$window', '$rootScope', '$timeout', 'Session', 'USER_ROLES',
-  function ($q, $http, AUTH_SETTINGS, $window, $rootScope, $timeout, Session, USER_ROLES) {
+angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$window', '$rootScope', '$timeout', 'Session',
+  function ($q, $http, AUTH_SETTINGS, $window, $rootScope, $timeout, Session) {
     var Auth = {},
         dummySession = {
           csrf: "2kjn2kj42l4h2h42kj34kj24",
