@@ -38,3 +38,4 @@ angular.module('sampleApp', ['ui.router'])
         Auth.isAuthenticated();
 
       }]);
+
