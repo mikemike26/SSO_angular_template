@@ -14,7 +14,7 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
 
     var
 
-    //combines our return url with any params that need to be sent with it.
+        //combines our return url with any params that need to be sent with it.
         buildReturnUrl = function () {
           var loginConfig = Session,
               url = loginConfig.url,
@@ -110,7 +110,11 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
               deferred.reject(status);
             });
           } else {
-            deferred.resolve(dummySession);
+
+            $timeout(function() {
+              deferred.resolve(dummySession);
+            }, 3000);
+
           }
 
           return deferred.promise;
@@ -187,12 +191,12 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
                   },
                   function error(status) {
 
-                    //destroySession(status);
+                    destroySession(status);
                   }
               );
             } else {
 
-              //destroySession(status);
+              destroySession(status);
             }
           }
       );
