@@ -17,9 +17,7 @@ angular.module('sampleApp').service('Session', ['USER_ROLES', 'AUTH_SETTINGS', '
 
     //stores the redirect and formats any params
     this.setRedirect = function () {
-      //make a copy of our auth settings login redirect to prevent polluting our constants
-      //we do this because you can add more params in the auth config to set in the return url
-      var authConfig = angular.fromJson(angular.toJson(AUTH_SETTINGS.loginRedirect));
+      var authConfig = AUTH_SETTINGS.loginRedirect;
 
       this.url = authConfig.url;
       this.params = createParams(authConfig.params);
