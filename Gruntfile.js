@@ -10,24 +10,157 @@
 //run "grunt dev"
 //re-creates assets and injects them as separate files into the index.html, decompresses css
 
+//grunt clean - deletes file/directory
+//grunt copy - copies files
+
+
+
+
+
+
+
 module.exports = function (grunt) {
+  var jsLoadOrder = [
+    'js/vendor/angular.js',
+    'js/vendor/jquery.js',
+    'js/vendor/*.js',
+    'js/_modules/*.js',
+    'js/routes.js',
+    'js/**/constants/**/*.js',
+    'js/**/classes/**/*.js',
+    'js/**/dummyData/**/*.js',
+    'js/**/directives/**/*.js',
+    'js/**/models/**/*.js',
+    'js/**/services/**/*.js',
+    'js/**/providers/**/*.js'
+  ];
+
+  var copyNodeModules = [
+    {
+      expand: true,
+      cwd: 'node_modules/jquery/dist/',
+      src: ['jquery.js'],
+      dest: 'js/vendor/'
+    },
+    {
+      expand: true,
+      cwd: 'node_modules/angular/',
+      src: ['angular.js'],
+      dest: 'js/vendor/'
+    },
+    {
+      expand: true,
+      cwd: 'node_modules/angular-ui-router/release/',
+      src: ['angular-ui-router.js'],
+      dest: 'js/vendor/'
+    },
+    {
+      expand: true,
+      cwd: 'node_modules/fastclick/lib/',
+      src: ['fastclick.js'],
+      dest: 'js/vendor/'
+    },
+    {
+      expand: true,
+      cwd: 'node_modules/lodash/',
+      src: ['lodash.js'],
+      dest: '_www/js/vendor/'
+    }
+  ];
+
+  var copyJs = {
+        expand: true,
+        cwd: 'js/',
+        src: ['**'],
+        dest: '_www/js/'
+      },
+      copyTemplates = {
+        expand: true,
+        cwd: 'templates/',
+        src: ['**'],
+        dest: '_www/templates/'
+      },
+      copyStyles = {
+        expand: true,
+        cwd: 'styles/',
+        src: [
+          'main.css',
+          'main.css.map'
+        ],
+        dest: '_www/styles/'
+      },
+      copyFonts = {
+        expand: true,
+        cwd: 'fonts/',
+        src: ['**'],
+        dest: '_www/fonts/'
+      },
+      copyImages = {
+        expand: true,
+        cwd: 'images/',
+        src: ['**'],
+        dest: '_www/images/'
+      },
+      copyIndex = {
+        expand: true,
+        cwd: '',
+        src: ['index.html'],
+        dest: '_www/'
+      };
+
+
   // Project configuration.
   grunt.initConfig({
+    clean: {
+      js: ['_www/js','_www/index.html'],
+      styles: ['_www/styles'],
+      www: ['_www']
+    },
+    copy: {
+      dev: {
+        files: [
+          copyFonts,
+          copyImages,
+          copyJs,
+          copyStyles,
+          copyTemplates,
+          copyIndex
+        ]
+      },
+      prod: {
+        files: [
+          copyFonts,
+          copyImages,
+          copyStyles,
+          copyTemplates,
+          copyIndex,
+          {
+            expand: true,
+            cwd: 'js/',
+            src: ['main.min.js'],
+            dest: '_www/js'
+          }
+        ]
+      },
+      js: {
+        files: [
+          copyJs,
+          copyIndex
+        ]
+      },
+      styles: {
+        files: [
+          copyStyles
+        ]
+      },
+      vendor: {
+        files: copyNodeModules
+      }
+    },
+
     tags: {
       dev: {
-        src: [
-          'node_modules/angular/angular.js',
-          'node_modules/jquery/dist/jquery.js',
-          'node_modules/angular-ui-router/release/angular-ui-router.min.js',
-          'js/vendor/**/*.js',
-          'js/app.js',
-          'js/routes.js',
-          'js/constants/**/*.js',
-          'js/directives/**/*.js',
-          'js/models/**/*.js',
-          'js/services/**/*.js',
-          'js/providers/**/*.js'
-        ],
+        src: jsLoadOrder,
         dest: 'index.html'
       },
       prod: {
@@ -62,18 +195,7 @@ module.exports = function (grunt) {
         footer: "" //added after everything
       },
       "build": {
-        "src": [
-          'node_modules/angular/angular.js',
-          'node_modules/jquery/dist/jquery.js',
-          'js/vendor/**/*.js',
-          'js/app.js',
-          'js/routes.js',
-          'js/constants/**/*.js',
-          'js/directives/**/*.js',
-          'js/models/**/*.js',
-          'js/services/**/*.js',
-          'js/vendor/**/*.js'
-        ],
+        "src": jsLoadOrder,
         "dest": "js/main.js"
       }
     },
@@ -87,21 +209,11 @@ module.exports = function (grunt) {
     watch: {
       css: {
         files: ['styles/**/*.scss'],
-        tasks: ['sass:dev']
+        tasks: ['sass:dev', 'clean:styles', 'copy:styles']
       },
       js: {
-        files: [
-          'js/**/*.js',
-          'js/vendor/**/*.js',
-          'js/app.js',
-          'js/routes.js',
-          'js/constants/**/*.js',
-          'js/directives/**/*.js',
-          'js/models/**/*.js',
-          'js/services/**/*.js',
-          'js/vendor/**/*.js'
-        ],
-        tasks:['tags:dev'],
+        files: jsLoadOrder,
+        tasks: ['copy:vendor', 'tags:dev', 'clean:js', 'copy:js'],
         options: {
           spawn: false
         }
@@ -115,11 +227,13 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-clean');
 
   // Task definitions
   grunt.registerTask('default', []);
-  grunt.registerTask('prod', ['sass:prod', 'concat', 'uglify', 'tags:prod']);
-  grunt.registerTask('dev', ['sass:dev', 'tags:dev']);
+  grunt.registerTask('prod', ['sass:prod', 'copy:vendor', 'concat', 'uglify', 'tags:prod', 'clean:www', 'copy:prod']);
+  grunt.registerTask('dev', ['sass:dev', 'copy:vendor', 'tags:dev', 'clean:www', 'copy:dev']);
 
 
 };

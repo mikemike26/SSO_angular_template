@@ -23,6 +23,8 @@
   "dependencies": {
     "angular": "^1.4.8",
     "angular-ui-router": "^0.2.15",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-copy": "^1.0.0",
     "jquery": "^2.2.0"
   }
 }
