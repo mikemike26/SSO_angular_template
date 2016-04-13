@@ -22,7 +22,7 @@ module.exports = function (grunt) {
     'js/vendor/angular.js',
     'js/vendor/jquery.js',
     'js/vendor/*.js',
-    'js/_modules/*.js',
+    'js/app.js',
     'js/routes.js',
     'js/**/constants/**/*.js',
     'js/**/classes/**/*.js',
