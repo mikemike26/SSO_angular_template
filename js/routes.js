@@ -9,21 +9,6 @@ angular.module('sampleApp').config(['$urlRouterProvider', '$stateProvider',
 
     $stateProvider
 
-        //login states - can probably make do without the abstract state, but this gives us flexibility
-        //this gives the app some place to sit while loading if it directly navigated to
-        .state("login", {
-          url: "/login",
-          template: '<div data-ui-view=""></div>',
-          abstract: true
-        })
-        .state("login.sso", {
-          url: "/sso",
-          data: {
-            role: "*"
-          },
-          template: '<div>Logging In...</div>'
-        })
-
         .state("root", {
           url: "",
           templateUrl: "templates/layout/layout.html",

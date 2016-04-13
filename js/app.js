@@ -14,16 +14,13 @@ angular.module('sampleApp', ['ui.router'])
 
           if(currentRoute.name === "") {
 
-            if(nextState.name !== "login.sso") {
+            if(nextState.name) {
               e.preventDefault();
               Auth.waitForAuth().then(function () {
 
                 Session.setCurrentRoute(defaultStateName, defaultParams);
                 $state.transitionTo(defaultStateName, defaultParams);
               });
-
-              //go to loading page
-              $state.go("login.sso");
             }
 
           }else {
@@ -54,7 +51,7 @@ angular.module('sampleApp', ['ui.router'])
         $rootScope.$on("$stateChangeSuccess", function(e, currentState) {
           var currentRoute = Session.getCurrentRoute();
 
-          if(currentRoute.name.length > 0 && currentState.name !== "login.sso") {
+          if(currentRoute.name.length > 0) {
             Session.setCurrentRoute(currentState.name, $stateParams);
           }
         });
