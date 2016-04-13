@@ -14,11 +14,6 @@
 //grunt copy - copies files
 
 
-
-
-
-
-
 module.exports = function (grunt) {
   var jsLoadOrder = [
     'js/vendor/angular.js',
@@ -35,7 +30,9 @@ module.exports = function (grunt) {
     'js/**/providers/**/*.js'
   ];
 
-  var copyNodeModules = [
+  var copy = {};
+
+  copy.nodeModules = [
     {
       expand: true,
       cwd: 'node_modules/jquery/dist/',
@@ -68,72 +65,72 @@ module.exports = function (grunt) {
     }
   ];
 
-  var copyJs = {
-        expand: true,
-        cwd: 'js/',
-        src: ['**'],
-        dest: '_www/js/'
-      },
-      copyTemplates = {
-        expand: true,
-        cwd: 'templates/',
-        src: ['**'],
-        dest: '_www/templates/'
-      },
-      copyStyles = {
-        expand: true,
-        cwd: 'styles/',
-        src: [
-          'main.css',
-          'main.css.map'
-        ],
-        dest: '_www/styles/'
-      },
-      copyFonts = {
-        expand: true,
-        cwd: 'fonts/',
-        src: ['**'],
-        dest: '_www/fonts/'
-      },
-      copyImages = {
-        expand: true,
-        cwd: 'images/',
-        src: ['**'],
-        dest: '_www/images/'
-      },
-      copyIndex = {
-        expand: true,
-        cwd: '',
-        src: ['index.html'],
-        dest: '_www/'
-      };
+  copy.js = {
+    expand: true,
+    cwd: 'js/',
+    src: ['**'],
+    dest: '_www/js/'
+  };
+  copy.templates = {
+    expand: true,
+    cwd: 'templates/',
+    src: ['**'],
+    dest: '_www/templates/'
+  };
+  copy.styles = {
+    expand: true,
+    cwd: 'styles/',
+    src: [
+      'main.css',
+      'main.css.map'
+    ],
+    dest: '_www/styles/'
+  };
+  copy.fonts = {
+    expand: true,
+    cwd: 'fonts/',
+    src: ['**'],
+    dest: '_www/fonts/'
+  };
+  copy.images = {
+    expand: true,
+    cwd: 'images/',
+    src: ['**'],
+    dest: '_www/images/'
+  };
+  copy.index = {
+    expand: true,
+    cwd: '',
+    src: ['index.html'],
+    dest: '_www/'
+  };
 
 
   // Project configuration.
   grunt.initConfig({
     clean: {
-      js: ['_www/js','_www/index.html'],
+      js: ['_www/js', '_www/index.html'],
       styles: ['_www/styles'],
       www: ['_www']
     },
     copy: {
       dev: {
         files: [
-          copyFonts,
-          copyImages,
-          copyJs,
-          copyStyles,
-          copyTemplates,
-          copyIndex
+          copy.fonts,
+          copy.images,
+          copy.js,
+          copy.styles,
+          copy.templates,
+          copy.index
         ]
       },
       prod: {
         files: [
-          copyFonts,
-          copyImages,
-          copyStyles,
-          copyTemplates,
-          copyIndex,
+          copy.fonts,
+          copy.images,
+          copy.styles,
+          copy.templates,
+          copy.index,
           {
             expand: true,
             cwd: 'js/',
@@ -144,17 +141,17 @@ module.exports = function (grunt) {
       },
       js: {
         files: [
-          copyJs,
-          copyIndex
+          copy.js,
+          copy.index
         ]
       },
       styles: {
         files: [
-          copyStyles
+          copy.styles
         ]
       },
       vendor: {
-        files: copyNodeModules
+        files: copy.nodeModules
       }
     },
 
