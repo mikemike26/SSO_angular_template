@@ -105,13 +105,15 @@ angular.module('sampleApp').factory('Auth', ['$q', '$http', 'AUTH_SETTINGS', '$w
             }).success(function (data, status, headers, config) {
 
               deferred.resolve(data);
-
             }).error(function (data, status, headers, config) {
               deferred.reject(status);
             });
           } else {
-            deferred.resolve(dummySession);
+            $timeout(function() {
+              deferred.resolve(dummySession);
+            }, 3000);
           }
+
 
           return deferred.promise;
         },

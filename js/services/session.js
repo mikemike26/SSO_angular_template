@@ -15,6 +15,27 @@ angular.module('sampleApp').service('Session', ['USER_ROLES', 'AUTH_SETTINGS', '
           return output;
         };
 
+    //caches current route in local storage so we can return to it on successful auth
+    this.setCurrentRoute = function(name, params) {
+      var currentRoute = {
+        name: name,
+        params: params
+      };
+
+      localStorage.currentRoute = angular.toJson(currentRoute);
+    };
+
+    this.getCurrentRoute = function() {
+      if(localStorage.currentRoute) {
+        return angular.fromJson(localStorage.currentRoute);
+      }else {
+        return {
+          name: "",
+          params: {}
+        };
+      }
+    };
+
     //stores the redirect and formats any params
     this.setRedirect = function () {
       var authConfig = AUTH_SETTINGS.loginRedirect;
@@ -34,5 +55,7 @@ angular.module('sampleApp').service('Session', ['USER_ROLES', 'AUTH_SETTINGS', '
       this.id = null;
       this.name = null;
       this.role = null;
+
+      localStorage.clear();
     };
   }]);
