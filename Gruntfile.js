@@ -13,6 +13,9 @@
 //grunt clean - deletes file/directory
 //grunt copy - copies files
 
+//grunt running grunt will create a _www directory, this will be your main build for deployment
+//grunt dev or grunt prod must be ran before enabling grunt watch
+
 
 module.exports = function (grunt) {
   var jsLoadOrder = [
